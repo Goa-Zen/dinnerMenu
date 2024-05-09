@@ -1,0 +1,227 @@
+@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";  
+html {
+    font-size: 62.5%; // 1rem is 10px
+}
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    font-family: 'montserrat';
+}
+.hidden {
+    visibility: hidden;
+}
+body {
+    overflow-x: hidden;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+    margin-top: 0rem;
+    margin-left: 5vw;
+    margin-right: 25vw;
+    width: 70vw;
+}
+.logo {
+    background-image: url('../images/logos/theThree_sm_apais.png');
+    height: 173px;
+    width: 342px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#abs-offers{
+    position: absolute;
+    width: 90vw;
+    padding: 20px;
+    background-color:white;
+    z-index: 2;
+}
+.abs-container {
+    margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+}
+.code-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-end;
+}
+#btn-exit {
+    background-color: transparent;
+    color:aliceblue;
+    border: 0px transparent;  
+}
+#btn-exit:hover {
+    font-weight:900; 
+    cursor: pointer;
+}
+.main-options-wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.notice {
+    margin: 20px 0px;
+    padding: 20px 10px;
+    border: 1px solid grey;
+}
+.main-option > a {
+    font-size : 1.5em;
+}
+.main-option > a:hover {
+    border: 3px 0px blueviolet;
+}
+#options-container {
+    display: none;
+}
+// Menu items
+.type_meal_dishes {
+    display: grid;
+    width: 70vw;
+    grid-template-columns: 2fr 1fr;
+    justify-items: center;
+    border: 1px solid grey;
+}
+.type_meal_dishes > div {
+
+    // border: 1px solid grey;
+}
+.main-option-container {
+    display: flex;
+    // width: 70vw;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: flex-end;  
+    align-content: center;
+    justify-items: center;
+}
+
+.main-option-container > div {
+    width: 150px;
+    min-height: 100px;
+    padding: 5px;
+    margin: 5px;
+    border-top: 1px solid rgb(22, 96, 45);; 
+    border-right: 1px solid rgb(74, 224, 119);
+    border-left: 1px solid rgb(74, 224, 119);
+    border-radius: 100px; 
+
+}
+.header, .sub-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 5px;
+}
+.header > h2 {
+    color: rgb(74, 224, 119);
+    text-decoration: underline;
+}
+.sub-header {
+    border: 1px solid rgb(118, 127, 121);
+}
+.text-wrapper {
+    font-size: 75%;
+}
+.btn-main-option, .main-option-link, .btn {
+    padding:2px 10px;
+    background-color: rgb(74, 224, 119);
+    border-color: cadetblue;
+    border-radius: 20px;
+}
+
+.btn-delete-option {
+    padding:1px;
+    background-color: rgb(235, 184, 90);
+    border-radius: 1px;
+}
+.cr-typeFlexCol,
+.cr-typeFlexColRow{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#orders-wrapper {
+    position: fixed;
+    padding: 10px;
+    width: 20vw;
+    border: 2px solid green;
+    top: 0;
+    right: 0;
+    display: none;
+    height: 99%;
+    overflow-y: auto;
+} 
+#orders-wrapper:before {
+    content: "\f2b4";
+}
+#orders-submit-button {
+    display: none;
+}
+#orders-total-final-price {
+    font-weight: 900;
+}
+#orders-saved-amount {
+
+    color: rgb(199, 86, 126); ;
+}
+#comment-wrapper {
+    // position: absolute; 
+    position: fixed;
+    background-color: rgba(232, 235, 46, 0.917);
+    padding: 15px 5px 10px 30px;
+    width: 20vw;
+    border: 2px solid rgb(199, 86, 126);
+    top: 10px;
+    left: 20px;
+    border-radius: 70px 70px 0px 70px;
+    display: none;
+
+} 
+@media (min-width: 769px) {
+
+    html {
+        font-size: 80%;
+    }
+    /* commons */
+/* .heading-wrapper modifier */
+    .cr-typeFlexRow {
+        display:flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-content: center;
+        /* align-items: center; */
+    }
+
+    .abs-container {
+        display: grid;
+        gap: 1em;
+        grid-template-columns: 1fr 2fr;
+        justify-items: center;
+    }
+    .door {
+        background-image: url('../images/backgrounds/door.jpg');
+        padding: 10px 20px;
+        // height: 297px;
+        // width: 198px;
+        height: 397px;
+        width: 302px;       
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    #comment-wrapper {
+        width: 25vw;
+    
+    } 
+}
