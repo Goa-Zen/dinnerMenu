@@ -1,3 +1,4 @@
+import moment from "https://esm.sh/moment";
 // import moment from '/moment';
 // variables
 const MainOptions = [
@@ -118,7 +119,7 @@ const Menu = [
     "price": [5, 5, 5, 6, 3, 3, 4]
   }
 ];
-
+const asking_to_choose = '\n \n Choose among the options given \n \n Please type the NUMBER of the choice you would like to ORDER';
 var myOrder = {
   breakfast_offer: 9.99,
   lunch_offer: 19.99,
@@ -140,7 +141,7 @@ var myOrder = {
   random_messages_rac: ['All our ingredients are natural!!', ' All our dishes are homemade!!', 'I am sure you will enjoy the meal!!'],
   
   setMainProperties: function (type) {
-      this.main_type = type === "0" ? "Breakfast"  : type === "1" ? "Lunch" : "Dinner"  ;
+      this.main_type = type === 0 ? "Breakfast"  : type === 1 ? "Lunch" : "Dinner"  ;
       this.offer_price = this.main_type === "Breakfast" ? this.breakfast_offer : this.main_type === "Lunch" ? this.lunch_offer: this.dinner_offer ;
   },
   saveDishes: function (object, index_2, plus = {"dish": '', "price" : 0}){
@@ -188,6 +189,25 @@ var myOrder = {
           let reducer = (accumulator, curr) => accumulator + parseFloat(curr);
           this.total_price = parseFloat(this.prices_values.reduce(reducer));             
       }
+  },
+  returnMenuValueToDelete: function() {
+    let maximun = this.total_counter -1 ; ;
+    let counter_builder = 0;
+    let choosen_option_ini = NaN;
+    let choosen_option = -1;
+    if (choosen_option < 0 || choosen_option > maximun || typeof(choosen_option) !== 'number' ||   Number.isNaN(choosen_option) === true  || choosen_option === '') {
+      do {
+        if (counter_builder > 0) {
+           alert(`You must introduce a number between 0 and ${maximun}`);
+        };    
+        let ini = counter_builder === 0 ? "What " : "Any other " ; 
+        choosen_option_ini = prompt(`${ini}dishes you would like to DELETE? \n \n ${myorder.messageChosenDishes()} ${asking_to_choose.replaceAll('ORDER', 'DELETE')}`); 
+        if (choosen_option_ini === null) {return null; }
+         choosen_option = choosen_option_ini !== '' ? Number(choosen_option_ini) : NaN;
+        counter_builder =+1;
+      } while (choosen_option < 0 || choosen_option > maximun  || typeof(choosen_option) !== 'number' ||  Number.isNaN(choosen_option) === true  || choosen_option === '');   
+     }; 
+     return choosen_option;
   },
   returnMessages: function (){
       let main = this.main_type === "Breakfast" ? "ingredients" : "main" ;
@@ -352,126 +372,172 @@ var myOrder = {
 };
 
 class MainOptionMessage {
-constructor(main_options) {
-  this.main_options = main_options;
-}
-today () {
-  let ahora = Date.now();
-  let today = new Date(ahora);
-  return today.toDateString();
-}
-todayHour () {
-  let ahora = Date.now();
-  let today = new Date(ahora);
-  return today.getHours();
-}
-getAllMainOptions(item) {
-  return [item.name,item.offer,item.bold].join(" ");   
- }
-timeMessage(hour) {
-  try {
-    if (hour > 8 && hour <12 )
-    {
-      return 'I am sure you are willing for a good Breakfast';
-    }else if (hour >= 12 && hour <16 ){
-      return 'I am sure you are willing for a good Lunch';
-    }else if (hour >= 16 && hour <18 ){
-      return 'I am sure you are willing for a good Dinner, but you will have to wait till 18h, when we open.';
-    }else if (hour >= 18 && hour <22 ){
-      return 'I am sure you are willing for a good Dinner';
-    }else if (hour >= 6 && hour <8 ){
-      return 'I am sure you are willing for a good Breakfast, but you will have to wait till 8h, when we open.';
-    }else{
-      return 'I am afraid we are now closed.';
-    }
-  }catch (err) {
-    return err.message;
-  }  
-}
-showMessage(printArray) {
-  let array = this.main_options.map(this.getAllMainOptions);
-  let welcome_message = 'Welcome to The Tfree \n ';
-  welcome_message = `${welcome_message}. Today is ${this.today()}.  \n`;
-  welcome_message = `${welcome_message}. Considering that the time is ${this.todayHour()} you might like a ${this.timeMessage(this.todayHour())}. \n`;
-  welcome_message = `${welcome_message}. But you might like to choose another option \n ${printArray(array)}.  \n`;
-  return welcome_message;
-}
-};
-class MealsMessage {
-constructor(obj_menu, type) {
-  this.obj_menu = obj_menu;
-  this.type = type;
-  this.obj_menu_total = 0;
-  this.cookingOptions = [
-    {
-        "dish": "Roasted",
-        "price": "2",
-    },
-     {
-        "dish": "With Sauces",
-        "price": "2",
-    },
-    {
-        "dish": "In Olive Oil",
-        "price": "3",
-    }
-  ];
-};
-showDishes()  {
-  try {
-    let obj = this.obj_menu;
-    let lista = [];
-    for (var k in obj.items) {
-      let price = this.type === "Dinner" ?  `${obj.price[k] * 1.25}€ `: `${obj.price[k]}€ `;
-      let name = obj.name;
-      name = name.toLowerCase();
-      var aux = {
-        type: name,
-        dish: obj.items[k], 
-        price: price
-      };
-      lista.push(aux);
-    }
-    this.obj_menu_total = lista.length;
-    return lista;
+  constructor(main_options) {
+    this.main_options = main_options;
+  }
+  getAllMainOptions(item) {
+    return [item.name,item.offer,item.bold].join(" ");   
+   }
+  timeMessage(hour) {
+    try {
+      if (hour > 8 && hour <12 )
+      {
+        return 'I am sure you are willing for a good BREAKFAST';
+      }else if (hour >= 12 && hour <16 ){
+        return 'I am sure you are willing for a good LUNCH';
+      }else if (hour >= 16 && hour <18 ){
+        return 'I am sure you are willing for a good DINNER, but you will have to wait till 18h, when we open.';
+      }else if (hour >= 18 && hour <22 ){
+        return 'I am sure you are willing for a good DINNER';
+      }else if (hour >= 6 && hour <8 ){
+        return 'I am sure you are willing for a good BREAKFAST, but you will have to wait till 8h, when we open.';
+      }else{
+        return 'I am afraid we are NOW CLOSED.';
+      }
+    }catch (err) {
+      return err.message;
+    }  
+  }
+ showMessage(printArray) {
+    let array = this.main_options.map(this.getAllMainOptions);
+    let welcome_message = 'Welcome to The Tfree \n ';
+    welcome_message = `${welcome_message}. Today is ${moment().format('MMMM Do, YYYY')}.  \n`;
+    welcome_message = `${welcome_message}. Considering that the time is ${moment().format('HH:mm:ss')}  ${this.timeMessage(Number(moment().format('HH')))}. \n`;
+    welcome_message = `${welcome_message}. But you might like to choose another option \n ${printArray(array)}. ${asking_to_choose}`;
+    return welcome_message;
+  }
+  returnChoosenMainOption () {
+    let welcome_message = this.showMessage(printArray) ;
+    let choosen_meal_ini = null;
+    let choosen_meal = -1;
+    let counter_builder = 0;
+    let maximun = this.main_options.length - 1;
     
-  }catch (err) {
-    throw err.message;
-  }    
-}
-getAllDishes(item) {
-  return [item.dish,item.price].join(" ");
-} 
-getAllOptins(item) {
-  return [item.dish,`${item.price}€.`].join(":");
-} 
-showMessage(printArray) {
-  let array = this.showDishes().map(this.getAllDishes);
-  let message = printArray(array);
-  message = `${this.obj_menu.name} \n ${message}`;
-  return message;
-}
-showOptionsMessage(printArray) {
-  let message = '';
-  switch (this.type){
-    case "Breakfast":
-      break;
-    default:
-      let array = this.cookingOptions.map(this.getAllOptins);
-      message = printArray(array);
-      message = `Would you like any of those cooking choices? \n ${message}`;
-  };
+    if (choosen_meal < 0 || choosen_meal > maximun || choosen_meal === '' || typeof(choosen_meal) !== 'number' ||  choosen_meal === null ||  Number.isNaN(choosen_meal) === true ) {
+      do {
+        if (counter_builder > 0) {
+          alert(`You must introduce a number between 0 and ${maximun}`);
+        };
+        choosen_meal_ini = prompt(welcome_message);
+        if (choosen_meal_ini === null) {  throw ("Its all stoped");}
+        choosen_meal = choosen_meal_ini !== '' ? Number(choosen_meal_ini) : NaN;
+        counter_builder = +1;
+        // if (choosen_meal === null) {  throw ("Its all stoped");}
+      } while (choosen_meal < 0 || choosen_meal > maximun || choosen_meal === '' || typeof(choosen_meal) !== 'number'  ||  choosen_meal === null ||  Number.isNaN(choosen_meal) === true);   
+    };
+    return choosen_meal;
+  }
+  
+};
 
-  return message;
-}
+class MealsMessage {
+  constructor(obj_menu, type) {
+    this.obj_menu = obj_menu;
+    this.type = type;
+    this.obj_menu_total = 0;
+    this.cookingOptions = [
+      {
+          "dish": "Roasted",
+          "price": "2",
+      },
+       {
+          "dish": "With Sauces",
+          "price": "2",
+      },
+      {
+          "dish": "In Olive Oil",
+          "price": "3",
+      }
+    ];
+  };
+  showDishes()  {
+    try {
+      let obj = this.obj_menu;
+      let lista = [];
+      for (var k in obj.items) {
+        let price = this.type === "Dinner" ?  `${obj.price[k] * 1.25}€ `: `${obj.price[k]}€ `;
+        let name = obj.name;
+        name = name.toLowerCase();
+        var aux = {
+          type: name,
+          dish: obj.items[k], 
+          price: price
+        };
+        lista.push(aux);
+      }
+      this.obj_menu_total = lista.length;
+      return lista;
+
+    }catch (err) {
+      throw err.message;
+    }    
+  }
+  getAllDishes(item) {
+    return [item.dish,item.price].join(" ");
+  } 
+  getAllOptins(item) {
+    return [item.dish,`${item.price}€.`].join(":");
+  } 
+  showMessage(printArray) {
+    let array = this.showDishes().map(this.getAllDishes);
+    let message = printArray(array);
+    message = `${this.obj_menu.name} \n ${message}`;
+    return message;
+  }
+  showOptionsMessage(printArray) {
+    let message = '';
+    switch (this.type){
+      case "Breakfast":
+        break;
+      default:
+        let array = this.cookingOptions.map(this.getAllOptins);
+        message = printArray(array);
+        message = `Would you like any of those cooking choices? \n ${message}`;
+    };
+
+    return message;
+  }
+  returnMenuChoosenValue() {
+      let maximun = this.obj_menu_total ;
+      let counter_builder = 0;
+      let choosen_option_ini = NaN;
+      let choosen_option = -1;
+      if (choosen_option < 0 || choosen_option > maximun || typeof(choosen_option) !== 'number' ||   Number.isNaN(choosen_option) === true  || choosen_option === '') {
+        do {
+          if (counter_builder > 0) {
+             alert(`You must introduce a number between 0 and ${maximun}`);
+          };    
+          let ini = counter_builder === 0 ? "What " : "Any other " ; 
+          choosen_option_ini = prompt(`${ini} ${this.obj_menu.name} you would like to ORDER? \n \n ${this.showMessage(printArray) }  ${asking_to_choose}.`);
+          if (choosen_option_ini === null) {return null; }
+           choosen_option = choosen_option_ini !== '' ? Number(choosen_option_ini) : NaN;
+          counter_builder =+1;
+        } while (choosen_option < 0 || choosen_option > maximun  || typeof(choosen_option) !== 'number' ||  Number.isNaN(choosen_option) === true  || choosen_option === '');   
+       }; 
+       return choosen_option;
+  }
+  returnOptionsValue(){
+    let plus = {"dish": '', "price" : 0};
+    let maximo = this.cookingOptions.length - 1;
+    let optionquestion = this.showOptionsMessage(printArray);
+    let respuesta = prompt(`${optionquestion} \n \n It has an added cost but it is worthy!!  ${asking_to_choose}.`); 
+    if (respuesta === null) {return plus;}
+    respuesta = respuesta !== '' ? Number(respuesta) : NaN;
+    if (respuesta < 0 || respuesta > maximo  || typeof(respuesta) !== 'number' ||  Number.isNaN(respuesta) === true  || respuesta === ''){
+      alert(respuesta);
+    }else{
+      plus = respuesta === null || respuesta >= this.cookingOptions.length ? plus: this.cookingOptions[respuesta];        
+    };  
+      return plus;
+  }
 };
 // FUNCTIONS
 function printArray(my_arr) {
-let result = '';
-for (var els in my_arr) {
-  result = `${result} ${els} - ${my_arr[els]} \n`;
-}
-return result;
+  let result = '';
+  for (var els in my_arr) {
+    result = `${result} ${els} - ${my_arr[els]} \n`;
+  }
+  return result;
 };
 function showBill(content) {
 var win = window.open('','UATRpt', 'menubar=0,location=0,toolbar=0,resizable=1,status=1,scrollbars=1');
@@ -553,38 +619,32 @@ const numberDishes = (total_dishes) => {
   });
 }
 function exitoCallback() {
-alert(`Thank you very much for your order. \n \n We will proceed to charge you the following dishes: \n ${myorder.messageChosenDishes()} `);
-let choosen = myorder.messageChosenDishes();
-choosen = choosen.replaceAll(';','</div><div>');
-const contenido = `${choosen} <br><br> Hope you have enjoyed your <strong>${myorder.main_type.toUpperCase()}</strong> and HOPE ALSO to see you soon. `;
-let isTrue= showBill(contenido);
+  alert(`Thank you very much for your order. \n \n We will proceed to charge you the following dishes: \n ${myorder.messageChosenDishes()} `);
+  let choosen = myorder.messageChosenDishes();
+  choosen = choosen.replaceAll(';','</div><div>');
+  const contenido = `${choosen} <br><br> Hope you have enjoyed your <strong>${myorder.main_type.toUpperCase()}</strong> and HOPE ALSO to see you soon. `;
+  let isTrue= showBill(contenido);
 };
 function falloCallback() {
-alert("The have been some mistake with the order. Maybe we shoul start again.");
+  alert("The have been some mistake with the order. Maybe we shoul start again.");
 };
-
 
 // BEHAVE
 // Welcome and main options shows (Breakfast ,lunch and dinder)
 var main_option_message = new MainOptionMessage(MainOptions);
-let welcome_message = main_option_message.showMessage(printArray) ;
-
-let choosen_meal = prompt(welcome_message);
-if (choosen_meal < 0 || choosen_meal > 2 || choosen_meal === '' || choosen_meal === null) {
-do {
-   choosen_meal = prompt(welcome_message);
-} while (choosen_meal < 0 || choosen_meal >2 || choosen_meal === '' || choosen_meal === null);   
-};
+let choosen_meal = main_option_message.returnChoosenMainOption();
 
 // We create a new order
 var myorder = myOrder;
 myorder.setMainProperties(choosen_meal);
-let objChoosenMeal = myorder.main_type === "Breakfast" ? Breakfast : Menu;
+
 // Options and menus
+let objChoosenMeal = myorder.main_type === "Breakfast" ? Breakfast : Menu;
 var main_menu_message = new MealsMessage(objChoosenMeal[0], myorder.main_type);
 let message_offered_dishes_main = main_menu_message.showMessage(printArray) ;
 var sub_menu_message = new MealsMessage(objChoosenMeal[1], myorder.main_type);
 let message_offered_dishes_sub = sub_menu_message.showMessage(printArray) ;
+
 // Welcome message
 let welcome = myorder.main_type === "Breakfast" ? " Please, Make me know when you Choose the ingredients you want" : "Please Make me know when you decide What is the main course you would like to order?" ;
 let output_message = `Welcome to the Tree!! \n \n Have a seat and have a look to our ${myorder.main_type} menu.\n \n ${welcome} \n`;
@@ -598,67 +658,50 @@ do {
 //Show and select main dishes
   var respuesta = true;
   do {
-    let choosen_main = prompt(message_offered_dishes_main);
-    // alert(choosen_main);
-    let maximo = main_menu_message.obj_menu_total ;
-    if (choosen_main < 0 || choosen_main > maximo || choosen_main === '') {
-      do {
-         choosen_main = prompt(message_offered_dishes_main);
-      } while (choosen_main < 0 || choosen_main > maximo  || choosen_main === '');   
-    };
-    
+    let choosen_main = main_menu_message.returnMenuChoosenValue();
     if (choosen_main !== null) {
       let plus = {"dish": '', "price" : 0};
-      if (myorder.main_type !== "Breakfast") {
-        let optionquestion = main_menu_message.showOptionsMessage(printArray);
-        respuesta = prompt(`${optionquestion} \n \n It has an added cost but it is worthy!! `); 
-        plus = respuesta === null || respuesta >= main_menu_message.cookingOptions.length ? plus: main_menu_message.cookingOptions[respuesta];          
-      }
+      if (myorder.main_type !== "Breakfast" ) {
+        plus = main_menu_message.returnOptionsValue();
+      };
       let message_main_meal = myorder.saveDishes(objChoosenMeal[0],choosen_main, plus);
       message_main_meal = `${message_main_meal} \n \n ${myorder.messageChosenDishes()} `;
-      
-      respuesta = confirm(`${message_main_meal} \n \n What ${objChoosenMeal[0].name} would you like to ORDER? `);       
+      respuesta = confirm(`${message_main_meal} \n \n Thank you.  If you would like to ask for another MAIN course press "Aceptar".`);       
     }else{
       respuesta = false;
     };
 } while (respuesta === true);   
 
-
 //Show and select subs dishes
-do {
-  let choosen_sub = prompt(message_offered_dishes_sub);
-  let maximo = sub_menu_message.obj_menu_total ;
-  if (choosen_sub < 0 || choosen_sub > maximo  || choosen_sub === '') {
-    do {
-       choosen_sub = prompt(message_offered_dishes_sub);
-    } while (choosen_sub < 0 || choosen_sub > maximo  || choosen_sub === '');   
-  };
-  if (choosen_sub !== null) {
-    let message_sub_meal = myorder.saveDishes(objChoosenMeal[1],choosen_sub);
-    message_sub_meal = `${message_sub_meal} \n \n  ${myorder.messageChosenDishes()} `;
-
-    respuesta = confirm(`${message_sub_meal} \n \n What ${objChoosenMeal[1].name} would you like to ORDER? `); 
-  }else{
-      respuesta = false;
-  };
-} while (respuesta === true);   
+  do {
+    let choosen_sub = sub_menu_message.returnMenuChoosenValue();
+    if (choosen_sub !== null) {
+      let message_sub_meal = myorder.saveDishes(objChoosenMeal[1],choosen_sub);
+      message_sub_meal = `${message_sub_meal} \n \n  ${myorder.messageChosenDishes()} `;
+      respuesta = confirm(` ${message_sub_meal} \n \n Thank you. If you would like to ask for another SIDER press "Aceptar"`); 
+    }else{
+        respuesta = false;
+    };
+  } while (respuesta === true);   
 
 // Something to erase
-respuesta = confirm(`Is it something you would like to DELETE? \n ${myorder.messageChosenDishes()} \n `);  
-if (respuesta === true) {
-    do {
-      let choosen_dishes_to_delete = prompt(`What are the dishes you would like to DELETE? \n ${myorder.messageChosenDishes()} \n `); 
-      if (choosen_dishes_to_delete !== null) {
-        let message_dishes_deleted = myorder.deleteDishes(choosen_dishes_to_delete);
-        message_dishes_deleted = `${message_dishes_deleted} \n \n  ${myorder.messageChosenDishes()} `;
-        respuesta = confirm(`${message_dishes_deleted} \n \n Is it something that you would like to DELETE? `);
-      }else{
-        respuesta = false;
-      };
-  } while (respuesta === true);   
-};  
-respuesta_fin = confirm(`Would you like to ask for anything else or shall we order now? \n \n `);  
+  if (myorder.total_counter > 0) {
+    respuesta = confirm(`Is it something you would like to DELETE? \n \n ${myorder.messageChosenDishes()} \n `);  
+    if (respuesta === true) {
+        do {
+          // let choosen_dishes_to_delete = prompt(`What are the dishes you would like to DELETE? \n \n ${myorder.messageChosenDishes()} ${asking_to_choose.replaceAll('ORDER', 'DELETE')}`); 
+          let choosen_dishes_to_delete = myorder.returnMenuValueToDelete();
+          if (choosen_dishes_to_delete !== null) {
+            let message_dishes_deleted = myorder.deleteDishes(choosen_dishes_to_delete);
+            message_dishes_deleted = `${message_dishes_deleted} \n \n  ${myorder.messageChosenDishes()} `;
+            respuesta = confirm(`${message_dishes_deleted} \n \n Is it something that you would like to DELETE? `);
+          }else{
+            respuesta = false;
+          };
+      } while (respuesta === true);   
+    };  
+  };
+  respuesta_fin = confirm(`Would you like to ask for anything else (Press "Aceptar") or shall we order now (Press "Cancelar"? \n \n `);     
 } while (respuesta_fin === true);  
-
 // The end of the order, asking the bill
 let promesa2 = numberDishes(myorder.total_counter).then(exitoCallback, falloCallback);
